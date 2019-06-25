@@ -34,11 +34,11 @@ public class JoinActions implements ServerJoinListener {
 
         } catch (ConfigurationException e) {
 
-            Main.logger.info(e.getMessage());
+            Main.logger.error(e.getMessage());
 
         } catch (IOException e) {
 
-            Main.logger.info(e.getMessage());
+            Main.logger.error(e.getMessage());
 
         }
 
