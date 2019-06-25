@@ -77,7 +77,7 @@ public class GuildUtil {
             // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
             File file = new File("./data/" + guildId + ".properties");
             PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
-            return (file.exists()) ? String.valueOf(config.getLong("prefix")) : "?";
+            return (file.exists()) ? config.getProperty("prefix").toString() : "?";
 
         } catch (ConfigurationException | NullPointerException ex) {
             return "?";
