@@ -1,9 +1,6 @@
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/dictionaries
-.idea/vcs.xml
-/out/
-# *.iml
-# modules.xml
-## File-based project format:
+.idea/
+*.iml
 *.iws
+# Maven
+log/
+target/
