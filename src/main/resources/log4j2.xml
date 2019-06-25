@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration name="Mailbox" status="INFO" monitorInterval="5" strict="true">
     <Appenders>
@@ -17,7 +16,6 @@
         <Root level="DEBUG">
             <AppenderRef ref="Console Appender"/>
             <!--<AppenderRef ref="File Appender"/>!-->
-        </Root>
-
+        </Root>\
     </Loggers>
 </Configuration>
