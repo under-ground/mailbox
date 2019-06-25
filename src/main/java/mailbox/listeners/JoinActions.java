@@ -121,7 +121,7 @@ public class JoinActions implements ServerJoinListener {
             }
 
         } catch (ConfigurationException e) {
-            e.printStackTrace();
+            Main.logger.error(e.getMessage());
         }
 
     }
