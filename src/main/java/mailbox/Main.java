@@ -1,6 +1,7 @@
 package mailbox;
 
-
+import mailbox.listeners.JoinActions;
+import mailbox.listeners.MessageActions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApiBuilder;
@@ -37,6 +38,10 @@ public class Main {
 
         // Use bot token in command arguments to run bot.
         api = new DiscordApiBuilder().setToken(args[0]).login().join();
+
+        // Registering listener classes
+        api.addServerJoinListener(new JoinActions());
+        api.addMessageCreateListener(new MessageActions());
 
     }
 
