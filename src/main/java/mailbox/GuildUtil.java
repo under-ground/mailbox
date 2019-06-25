@@ -85,5 +85,55 @@ public class GuildUtil {
 
     }
 
+    /**
+     * Used to configure MessageChannel
+     *
+     * @param guildId
+     * @param messageChannel
+     * @throws ConfigurationException
+     * @throws IOException
+     * @throws Exception
+     */
+    public static void addMessageChannel(long guildId, String messageChannel) throws ConfigurationException, IOException, Exception {
+        // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+        PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+        File file = new File("./data/" + guildId + ".properties");
+
+        // Checks to see if the file exists, if it does the method is stopped and an exception is thrown
+        if (file.exists()) {
+            if (config.containsKey("messageChannel") && Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+                throw new Exception("The Message System Module is already is already set up");
+            } else {
+                config.setProperty("messageChannel", messageChannel);
+            }
+            config.save();
+        }
+    }
+
+    /**
+     * Used to configure MessageInbox
+     *
+     * @param guildId
+     * @param messageInbox
+     * @throws ConfigurationException
+     * @throws IOException
+     * @throws Exception
+     */
+    public static void addMessageInbox(long guildId, String messageInbox) throws ConfigurationException, IOException, Exception {
+        // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+        PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+        File file = new File("./data/" + guildId + ".properties");
+
+        // Checks to see if the file exists, if it does the method is stopped and an exception is thrown
+        if (file.exists()) {
+            if (config.containsKey("messageInbox") && Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                throw new Exception("The Message System Module is already is already set up");
+            } else {
+                config.setProperty("messageInbox", messageInbox);
+            }
+            config.save();
+        }
+    }
+
 
 }
