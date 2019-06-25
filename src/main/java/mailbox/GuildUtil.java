@@ -37,4 +37,53 @@ public class GuildUtil {
         config.save();
 
     }
+
+
+    /**
+     * Used to set the prefix of the guild using the Guild ID fetched from the
+     * event that initiates the call adding the Prefix into the servers
+     * configuration file.
+     *
+     * @param guildId
+     * @param prefix
+     * @throws FileAlreadyExistsException
+     * @throws ConfigurationException
+     */
+    public static void setPrefix(long guildId, String prefix) throws FileAlreadyExistsException, ConfigurationException {
+
+        // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+        File file = new File("./data/" + guildId + ".properties");
+        PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+
+        // Checks to see if the file exists, if it does the method is stopped and an exception is thrown
+        if (file.exists()) {
+            config.setProperty("prefix", prefix);
+            config.save();
+        }
+
+    }
+
+    /**
+     * Global bot prefix when called produces the saved prefix configuration in
+     * the servers configuration file If no file exists, the prefix is defaulted
+     * to "?"
+     *
+     * @param guildId
+     * @return
+     */
+    public static String botPrefix(long guildId) {
+
+        try {
+            // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+            File file = new File("./data/" + guildId + ".properties");
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+            return (file.exists()) ? String.valueOf(config.getLong("prefix")) : "?";
+
+        } catch (ConfigurationException | NullPointerException ex) {
+            return "?";
+        }
+
+    }
+
+
 }
