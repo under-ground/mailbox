@@ -133,7 +133,7 @@ public class MessageActions implements MessageCreateListener {
 
                     EmbedBuilder userMessage = new EmbedBuilder()
                             .setThumbnail(event.getServer().get().getIcon().get())
-                            .setTitle("**The " + event.getServer().get().getName() + "  moderators have sent you a message**").setColor(Color.green)
+                            .setTitle("**The " + event.getServer().get().getName() + " staff have sent you a message**").setColor(Color.green)
                             .addField("Message", message, true)
                             .addField("Note", "To reply, send a message here, revisit the <#" + GuildUtil.getMessageChannelId(event.getServer().get().getId()) + "> channel or reach out to a moderator directly.", true);
                     if (event.getMessageContent().startsWith(GuildUtil.botPrefix(event.getServer().get().getId()) + "reply ")) {
