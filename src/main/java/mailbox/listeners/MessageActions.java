@@ -4,7 +4,9 @@ import mailbox.GuildUtil;
 import org.apache.commons.configuration.ConfigurationException;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.exception.MissingPermissionsException;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.awt.*;
 import java.nio.file.FileAlreadyExistsException;
@@ -33,6 +35,28 @@ public class MessageActions implements MessageCreateListener {
 
             switch (commandArgs[0]) {
 
+                case "help": {
+
+                    // Check if the author is an administrator
+                    if (!event.getMessageAuthor().isServerAdmin()) {
+                        event.getChannel().sendMessage("This command can only be used by a server administrator");
+                        return;
+                    }
+
+                    if (event.getMessageAuthor().isServerAdmin()) {
+                        String prefix = GuildUtil.botPrefix(event.getServer().get().getId());
+                                EmbedBuilder modCommands = new EmbedBuilder()
+                                .setThumbnail(event.getApi().getYourself().getAvatar())
+                                .setTitle("**Using Mailbox Commands:**").setColor(Color.white)
+                                .addField(prefix + "reply <UserID> <Message>", " Used to reply to users using the Message System module. Can either mention the user or just use their ID" + "\n", true)
+                                .addField(prefix + "serverinfo", "Provides general information about the server such as owner and user count" + "\n", true)
+                                .addField(prefix + "prefix", "Changes the prefix used by the bot for commands", true);
+                        event.getChannel().sendMessage(modCommands);
+                    }
+                }
+
+                break;
+
                 case "prefix":
 
                     // Check if the author is an administrator
@@ -52,7 +76,7 @@ public class MessageActions implements MessageCreateListener {
                     break;
 
                 case "serverinfo":
-                    // Builds embed
+
                     if (event.getMessageAuthor().isServerAdmin()) {
                         Date serverCreationDate = Date.from(event.getServer().get().getCreationTimestamp());
                         EmbedBuilder serverinfo = new EmbedBuilder()
@@ -67,7 +91,6 @@ public class MessageActions implements MessageCreateListener {
                                 .addField("**Verification Level:**", event.getServer().get().getVerificationLevel().toString(), true)
                                 .addField("**Text Channels:**", Integer.toString(event.getServer().get().getTextChannels().size()), true)
                                 .addField("**Voice Channels:**", Integer.toString(event.getServer().get().getVoiceChannels().size()), true);
-                        // Send the embed. It logs every exception, besides missing permissions (you are not allowed to send newMessage in the channel)
                         event.getChannel().sendMessage(serverinfo);
                     }
                     break;
