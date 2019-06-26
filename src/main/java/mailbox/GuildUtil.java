@@ -7,6 +7,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GuildUtil {
 
@@ -133,6 +135,60 @@ public class GuildUtil {
             }
             config.save();
         }
+    }
+
+    /**
+     * Used to return the messageChannel Channel ID d to allow for message listener to
+     * verify which channel to delete messages from
+     *
+     * @param guildId
+     * @return
+     */
+    public static String getMessageChannelId(long guildId) {
+
+        try {
+
+            File file = new File("./data/" + guildId + ".properties");
+
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+            if (file.exists()) {
+                if (Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+                    return config.getProperty("messageChannel").toString();
+                }
+
+            }
+
+        } catch (ConfigurationException ex) {
+            Logger.getLogger(GuildUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Used to return the messageInbox Channel ID to allow for message listener to
+     * verify which channel reply commands will be used in
+     *
+     * @param guildId
+     * @return
+     */
+    public static String getInboxChannelId(long guildId) {
+
+        try {
+
+            File file = new File("./data/" + guildId + ".properties");
+
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+            if (file.exists()) {
+                if (Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                    return config.getProperty("messageInbox").toString();
+                }
+
+            }
+
+        } catch (ConfigurationException ex) {
+            Logger.getLogger(GuildUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 
