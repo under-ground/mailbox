@@ -2,7 +2,7 @@
 # discord-mailbox
 A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message server staff and receive a reply. This project is built for the Discord Community Hack Week for fun and is not intended to be a production ready product.
 
-
+![](https://i.imgur.com/rGxeTbD.mp4)
 
 
 ## Open source libraries used in this project
