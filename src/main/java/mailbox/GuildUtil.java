@@ -3,10 +3,12 @@ package mailbox;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.javacord.api.entity.user.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -191,5 +193,21 @@ public class GuildUtil {
         return null;
     }
 
+    public static User getTargetUserByArgs(String args, int index) throws InvalidUsageException {
+        try {
+            String[] splitArgs = args.split(" ");
+            User targetUser = Main.api.getUserById(Long.parseLong(splitArgs[index].replaceAll("[<@!>]", ""))).get();
+            return targetUser;
+        } catch (InterruptedException | ExecutionException | NumberFormatException ex) {
+            throw new InvalidUsageException("❌ The target user could not be found.");
+        }
+    }
+
+    public static class InvalidUsageException extends Exception {
+
+        public InvalidUsageException(String message) {
+            super(message);
+        }
+    }
 
 }
