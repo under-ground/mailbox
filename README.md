@@ -3,9 +3,9 @@
 A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message server staff and receive a reply. This project is built for the Discord Community Hack Week for fun and is not intended to be a production ready product.
 
 
-## Uses
+## Usage
 
-Users can send messages in the designated "Message-Channel" though, the channel name can of course be saved. After the user sends a message, the message is immediately deleted and routed to the inbox channel. Upon successful receipt of the message, the user should receive a direct message confirming their message has been sent. The user will receive a mention ping if their privacy settings do not allow direct messages.
+Users can send messages in the designated "Message-Channel" though, the channel name can of course be saved. After the user sends a message, the message is immediately deleted and routed to the inbox channel. Upon successful receipt of the message, the user should receive a direct message confirming their message has been sent. The user will receive a mention ping if their privacy settings do not allow direct messages. *Note: It's recommended to enable slowmode to prevent spam*
 
 ![](https://media.giphy.com/media/VGJi4ObV5pdJRg8JdT/giphy.gif)
 
