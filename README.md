@@ -22,6 +22,7 @@ api = new DiscordApiBuilder().setToken(args[0]).login().join();
 
 Thanks to everyone over at the [Javacord discord community](https://discord.gg/0qJ2jjyneLEgG7y3) for always being extremely helpful any time I had questions. Saladoc and Vampire the real mvps.
 
+[Icons8](https://icons8.com/) for logo
 
 ## License
 
