@@ -34,7 +34,7 @@ When a server staff member responds to a users inquiry, they can click the ❌ r
 
 ![](https://media.giphy.com/media/XHFnOAlkJ2vDLKUsLU/giphy.gif)
 
-If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?" - The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a soluition to this, the bot will send a second message including the ID in plain text to allow for easier copying.
+If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?" - The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a solution to this, the bot will send a second message including the ID in plain text to allow for easier copying.
 
 
 Upon joining the server, the bot will automatically create two channels, "*message-channel*" & "*message-inbox*" - Once the channels have been created, the bot will automatically post an embed in the *message-channel* which you can leave there for users to follow it's instructions. The new channels will have permissions restricted for *@everyone* so you will need to configure both the *message-channel* and *message-inbox* channel to the permissions you want them to have (having mods able to view *message-inbox* and @everyone or certain activity roles to view the *message-channel.*
