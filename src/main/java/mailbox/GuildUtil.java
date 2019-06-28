@@ -11,9 +11,7 @@ import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
-import org.javacord.api.event.Event;
-import org.javacord.api.event.server.ServerEvent;
-import org.javacord.api.event.server.ServerJoinEvent;
+
 
 import java.awt.*;
 import java.io.File;
@@ -332,6 +330,7 @@ public class GuildUtil {
 
     private static void addMessageChannel(Server server, DiscordApi api, EmbedBuilder embed, Permissions permissions) {
         CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
+                .setSlowmodeDelayInSeconds(120)
                 .setName("message-channel")
                 .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
                 .setAuditLogReason("Automated creation from bot to set up message system")
