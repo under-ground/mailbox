@@ -5,6 +5,7 @@ import mailbox.listeners.MessageActions;
 import mailbox.listeners.ReactionActions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.ExceptionLogger;
 import org.javacord.core.util.logging.LoggerUtil;
@@ -20,8 +21,6 @@ import java.nio.file.Paths;
  */
 public class Main {
 
-    // Used to allow calls from other classes.
-    public static org.javacord.api.DiscordApi api;
 
     public static final Logger logger = LoggerUtil.getLogger(Main.class);
 
@@ -30,20 +29,35 @@ public class Main {
      */
     public static void main(String args[]) {
 
-
         logger.info("Mailbox - Designed by Cosmos open source under GPL 3.0 license. "
                 + "Special thanks to everyone on the Javacord Discord server for creating such a great library");
 
         // Used for when Log4j isn't in use. Not recommended
         //FallbackLoggerConfiguration.setDebug(true);
 
-        // Use bot token in command arguments to run bot.
-        api = new DiscordApiBuilder().setToken(args[0]).login().join();
 
+        // The code below will check for cli argument or environment variable and close if neither are found
+        String token = null;
+        if (args.length > 0) {
+            token = args[0];
+        }
+        if (token == null) {
+            token = System.getenv("MAILBOX_TOKEN");
+        }
+        if (token == null) {
+            System.err.println("No Token supplied.");
+            System.err.println("Supply Token als Command Line Argument or Environment Variable \"MAILBOX_TOKEN\"");
+            System.exit(1);
+        }
+
+        // Use bot token in command arguments or environment variables to run bot.
+        new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
+            api.addServerJoinListener(new JoinActions());
+            api.addMessageCreateListener(new MessageActions());
+            api.addReactionAddListener(new ReactionActions());
+        }).exceptionally(ExceptionLogger.get());
         // Registering listener classes
-        api.addServerJoinListener(new JoinActions());
-        api.addMessageCreateListener(new MessageActions());
-        api.addReactionAddListener(new ReactionActions());
+
 
     }
 
