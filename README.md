@@ -48,9 +48,28 @@ If you didn't notice in the pictures above, the users ID is sent as a second mes
 
 ## Logging in
 
-To log into the bot, you will need to place your bot token in runtime arguments depending on the IDE you're using or when running from command line. 
+To log into the bot, you will need to place your bot token in command line arguments or through usage of an environment variable. Depending on which IDE you use, this can be pretty painless. For Intellij you can do both command line arguments or configure environment variables in Run -> Edit Configurations.
 ```java
-api = new DiscordApiBuilder().setToken(args[0]).login().join();
+        // The code below will check for cli argument or environment variable and close if neither are found
+        String token = null;
+        if (args.length > 0) {
+            token = args[0];
+        }
+        if (token == null) {
+            token = System.getenv("MAILBOX_TOKEN");
+        }
+        if (token == null) {
+            System.err.println("No Token supplied.");
+            System.err.println("Supply Token als Command Line Argument or Environment Variable \"MAILBOX_TOKEN\"");
+            System.exit(1);
+        }
+
+        // Use bot token in command arguments or environment variables to run bot.
+        new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
+            api.addServerJoinListener(new JoinActions());
+            api.addMessageCreateListener(new MessageActions());
+            api.addReactionAddListener(new ReactionActions());
+        }).exceptionally(ExceptionLogger.get());;
 ```
 
 ## Credits
