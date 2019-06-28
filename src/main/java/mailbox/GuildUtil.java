@@ -4,11 +4,20 @@ package mailbox;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.ServerTextChannelBuilder;
+import org.javacord.api.entity.permission.Permissions;
+import org.javacord.api.entity.permission.PermissionsBuilder;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+import org.javacord.api.event.Event;
+import org.javacord.api.event.server.ServerEvent;
+import org.javacord.api.event.server.ServerJoinEvent;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -155,6 +164,8 @@ public class GuildUtil {
 
             PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
             if (file.exists()) {
+                if (api.getServerById(guildId).isPresent())
+
                 if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
                     return config.getProperty("messageChannel").toString();
                 }
@@ -178,17 +189,17 @@ public class GuildUtil {
 
         try {
 
-                File file = new File("./data/" + guildId + ".properties");
+            File file = new File("./data/" + guildId + ".properties");
 
-                PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
 
-                if (file.exists()) {
+            if (file.exists()) {
 
-                    if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
-                        return config.getProperty("messageInbox").toString();
-                    }
-
+                if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                    return config.getProperty("messageInbox").toString();
                 }
+
+            }
 
         } catch (ConfigurationException ex) {
             Logger.getLogger(GuildUtil.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,6 +207,39 @@ public class GuildUtil {
 
         return null;
 
+
+    }
+
+    /**
+     * Removes the channels if they are listed in the configuration file as an
+     * ID and removes the entries.
+     *
+     * @param guildId
+     * @param channel
+     */
+    public static void resetMessageSystem(long guildId, ServerTextChannel channel, DiscordApi api) {
+        try {
+            // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+            File file = new File("./data/" + guildId + ".properties");
+
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+            if (file.exists()) {
+                api.getServerById(guildId).ifPresent(server -> {
+                    server.getChannelById(config.getString("messageChannel")).ifPresent(serverChannel -> serverChannel.delete());
+                    server.getChannelById(config.getString("messageInbox")).ifPresent(serverChannel -> serverChannel.delete());
+
+                });
+                config.clearProperty("messageInbox");
+                config.clearProperty("messageChannel");
+                config.save();
+                channel.sendMessage(" The Message System has been reset. "
+                        + "Delete any remaining channels on the server and use " + botPrefix(guildId) + "setup if you wish to set up the Message System again.");
+
+            }
+
+        } catch (ConfigurationException ex) {
+            Logger.getLogger(GuildUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -217,6 +261,83 @@ public class GuildUtil {
 
         public InvalidUsageException(String message) {
             super(message);
+        }
+    }
+
+    public static void addMessageChannels(Server server, DiscordApi api) {
+        try {
+            // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
+            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + server.getId() + ".properties");
+            File file = new File("./data/" + server.getId() + ".properties");
+            if (file.exists()) {
+                Permissions permissions = new PermissionsBuilder().setAllDenied().build();
+
+                if (!config.containsKey("messageInbox")) {
+                    CompletableFuture<Void> inboxChannel = new ServerTextChannelBuilder(server)
+                            .setName("message-inbox")
+                            .setTopic("Use " + GuildUtil.botPrefix(server.getId()) + "reply <User ID> <Message> to respond to messages")
+                            .setAuditLogReason("Automated creation from bot to set up message system")
+                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
+                            .create().thenAcceptAsync(channel -> {
+                                try {
+                                    GuildUtil.addMessageInbox(server.getId(), channel.getIdAsString(), api);
+                                    channel.sendMessage(" The " + channel.getMentionTag() + " has been set up successfully");
+                                } catch (Exception ex) {
+                                    channel.sendMessage("The inbox was unable to be set up");
+                                }
+                            });
+
+                } else if (!api.getServerById(server.getId()).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                    CompletableFuture<Void> inboxChannel = new ServerTextChannelBuilder(server)
+                            .setName("message-inbox")
+                            .setTopic("Use " + GuildUtil.botPrefix(server.getId()) + "reply <User ID> <Message> to respond to messages")
+                            .setAuditLogReason("Automated creation from bot to set up message system")
+                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
+                            .create().thenAcceptAsync(channel -> {
+                                try {
+                                    GuildUtil.addMessageInbox(server.getId(), channel.getIdAsString(), api);
+                                    channel.sendMessage(" The Message Inbox channel was previously created but was unable to be verified. A new replacement channel " + channel.getMentionTag() + " has been created as a result.");
+                                } catch (Exception ex) {
+                                    channel.sendMessage("Automated creation from bot to set up message system");
+                                }
+                            });
+
+                }
+                if (!config.containsKey("messageChannel")) {
+                    CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
+                            .setName("message-channel")
+                            .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
+                            .setAuditLogReason("Automated creation from bot to set up message system")
+                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
+                            .create().thenAccept(channel -> {
+                                try {
+                                    GuildUtil.addMessageChannel(server.getId(), channel.getIdAsString(), api);
+                                    channel.sendMessage(" The " + channel.getMentionTag() + " has been set up successfully");
+                                } catch (Exception ex) {
+                                    channel.sendMessage("Message channel was unable to be created");
+                                }
+                            });
+                } else if (!api.getServerById(server.getId()).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+
+                    CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
+                            .setName("message-channel")
+                            .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
+                            .setAuditLogReason("Automated creation from bot to set up message system")
+                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
+                            .create().thenAccept(channel -> {
+                                try {
+                                    GuildUtil.addMessageChannel(server.getId(), channel.getIdAsString(), api);
+                                    channel.sendMessage(" The Message channel was previously created but was unable to be verified. A new replacement channel " + channel.getMentionTag() + " has been created as a result.");
+                                } catch (Exception ex) {
+                                    channel.sendMessage("Message channel was unable to be created");
+                                }
+                            });
+                }
+
+            }
+
+        } catch (ConfigurationException e) {
+            Main.logger.error(e.getMessage());
         }
     }
 
