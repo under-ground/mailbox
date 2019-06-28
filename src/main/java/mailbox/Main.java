@@ -59,8 +59,8 @@ public class Main {
     }
 
     /*
-Handles the logger initialization so it can be called from other classes to output to console
- */
+    Handles the logger initialization so it can be called from other classes to output to console
+    */
     private static void initializeLogging() throws IOException {
         System.setProperty("java.util.logging.manager", LogManager.class.getName());
         String log4jConfigurationFileProperty = System.getProperty("log4j.configurationFile");
