@@ -103,9 +103,12 @@ public class MessageActions implements MessageCreateListener {
                     userMessage.setFooter("ID: " + event.getMessageAuthor().getIdAsString());
 
                     // Sends the newMessage in the Receiving Channel
-                    Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(aVoid -> {
+                    Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
                         // Deletes the newMessage
                         event.getMessage().delete().join();
+
+                        // Adds ❌ reaction to allow staff to see if a message has not been responded to yet
+                        message.addReaction("❌");
                         // Sends the sending user's ID in the Receiving Channel for ease-of-access copy-paste
                         Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
                     });
