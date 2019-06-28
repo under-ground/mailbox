@@ -60,9 +60,9 @@ public class MessageActions implements MessageCreateListener {
                     }
 
                     try {
-                        Main.api.getUserById(event.getMessageAuthor().getId()).get().openPrivateChannel().get().sendMessage(privateMessage).join();
+                        event.getApi().getUserById(event.getMessageAuthor().getId()).get().openPrivateChannel().get().sendMessage(privateMessage).join();
                     } catch (InterruptedException | ExecutionException | NoSuchElementException | CompletionException ex) {
-                        Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage("❌ " + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
+                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage("❌ " + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
                                 + " sent us a message, but they are unable to receive direct messages.");
 
                         event.getChannel().sendMessage("❌ "
@@ -103,14 +103,14 @@ public class MessageActions implements MessageCreateListener {
                     userMessage.setFooter("ID: " + event.getMessageAuthor().getIdAsString());
 
                     // Sends the newMessage in the Receiving Channel
-                    Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
+                    event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
                         // Deletes the newMessage
                         event.getMessage().delete().join();
 
                         // Adds ❌ reaction to allow staff to see if a message has not been responded to yet
                         message.addReaction("❌");
                         // Sends the sending user's ID in the Receiving Channel for ease-of-access copy-paste
-                        Main.api.getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
+                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
                     });
 
                 }
