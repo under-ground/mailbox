@@ -5,7 +5,6 @@ import mailbox.listeners.MessageActions;
 import mailbox.listeners.ReactionActions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.ExceptionLogger;
 import org.javacord.core.util.logging.LoggerUtil;
@@ -56,8 +55,6 @@ public class Main {
             api.addMessageCreateListener(new MessageActions());
             api.addReactionAddListener(new ReactionActions());
         }).exceptionally(ExceptionLogger.get());
-        // Registering listener classes
-
 
     }
 
