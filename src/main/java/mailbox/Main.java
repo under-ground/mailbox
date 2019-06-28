@@ -2,6 +2,7 @@ package mailbox;
 
 import mailbox.listeners.JoinActions;
 import mailbox.listeners.MessageActions;
+import mailbox.listeners.ReactionActions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApiBuilder;
@@ -42,6 +43,7 @@ public class Main {
         // Registering listener classes
         api.addServerJoinListener(new JoinActions());
         api.addMessageCreateListener(new MessageActions());
+        api.addReactionAddListener(new ReactionActions());
 
     }
 
