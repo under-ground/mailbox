@@ -28,14 +28,19 @@ Assuming the end user has corrected their privacy settings, a message will be se
 ![](https://i.imgur.com/FwV3Jgs.png)
 
 
-## Further Explanation of Features
+## Additional Details
 
 When a server staff member responds to a users inquiry, they can click the ❌ reaction which will force the bot to replace it with a ✅ reaction. This functionality allows for easier tracking for which messages have been responded to and which ones need attention.
 
 ![](https://media.giphy.com/media/XHFnOAlkJ2vDLKUsLU/giphy.gif)
 
-
 If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?" - The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a soluition to this, the bot will send a second message including the ID in plain text to allow for easier copying.
+
+
+Upon joining the server, the bot will automatically create two channels, "*message-channel*" & "*message-inbox*" - Once the channels have been created, the bot will automatically post an embed in the *message-channel* which you can leave there for users to follow it's instructions. The new channels will have permissions restricted for *@everyone* so you will need to configure both the *message-channel* and *message-inbox* channel to the permissions you want them to have (having mods able to view *message-inbox* and @everyone or certain activity roles to view the *message-channel.*
+
+![](https://i.imgur.com/UB06pRv.png)
+
 
 
 
@@ -50,26 +55,26 @@ If you didn't notice in the pictures above, the users ID is sent as a second mes
 
 To log into the bot, you will need to place your bot token in command line arguments or through usage of an environment variable. Depending on which IDE you use, this can be pretty painless. For Intellij you can do both command line arguments or configure environment variables in Run -> Edit Configurations.
 ```java
-        // The code below will check for cli argument or environment variable and close if neither are found
-        String token = null;
-        if (args.length > 0) {
-            token = args[0];
-        }
-        if (token == null) {
-            token = System.getenv("MAILBOX_TOKEN");
-        }
-        if (token == null) {
-            System.err.println("No Token supplied.");
-            System.err.println("Supply Token als Command Line Argument or Environment Variable \"MAILBOX_TOKEN\"");
-            System.exit(1);
-        }
+    // The code below will check for cli argument or environment variable and close if neither are found
+String token = null;
+if (args.length > 0) {
+    token = args[0];
+}
+if (token == null) {
+    token = System.getenv("MAILBOX_TOKEN");
+}
+if (token == null) {
+    System.err.println("No Token supplied.");
+    System.err.println("Supply Token als Command Line Argument or Environment Variable \"MAILBOX_TOKEN\"");
+    System.exit(1);
+}
 
-        // Use bot token in command arguments or environment variables to run bot.
-        new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
-            api.addServerJoinListener(new JoinActions());
-            api.addMessageCreateListener(new MessageActions());
-            api.addReactionAddListener(new ReactionActions());
-        }).exceptionally(ExceptionLogger.get());;
+// Use bot token in command arguments or environment variables to run bot.
+new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
+    api.addServerJoinListener(new JoinActions());
+    api.addMessageCreateListener(new MessageActions());
+    api.addReactionAddListener(new ReactionActions());
+}).exceptionally(ExceptionLogger.get());
 ```
 
 ## Credits
