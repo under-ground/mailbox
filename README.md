@@ -3,6 +3,14 @@
 A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message all server staff and receive a response in private messages. The bot can be self hosted for a single server, or hosted on many servers at once. This project is built for the Discord Community Hack Week for fun and educational purposes and is not intended to be a production ready product.
 
 
+You will be able to add the bot to your server and test out its features for the duration of the contest. Once the winners have been announced, the bot will be taken offline and it's recommended to self host. 
+
+You can invite the bot to your server by clicking [here](https://discordapp.com/oauth2/authorize?client_id=591466840371363870&scope=bot&permissions=8)
+
+
+You can also join the [Mailbox Discord Server](https://discord.gg/9fDc5ze) if you just want to see what it looks like and test sending messages. *Note: The message-inbox channel is left readable to all users just for visibility purposes, but users are restricted from DMing for security reasons*
+
+
 ## Usage
 
 Users can send messages in the designated "Message-Channel" though, the channel name can of course be saved. After the user sends a message, the message is immediately deleted and routed to the inbox channel. Upon successful receipt of the message, the user should receive a direct message confirming their message has been sent. The user will receive a mention ping if their privacy settings do not allow direct messages. 
