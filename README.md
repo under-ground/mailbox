@@ -28,6 +28,14 @@ Assuming the end user has corrected their privacy settings, a message will be se
 ![](https://i.imgur.com/FwV3Jgs.png)
 
 
+## Further Explanation of Features
+
+When a server staff member responds to a users inquiry, they can click the ❌ reaction which will force the bot to replace it with a ✅ reaction. This functionality allows for easier tracking for which messages have been responded to and which ones need attention.
+
+![](https://media.giphy.com/media/XHFnOAlkJ2vDLKUsLU/giphy.gif)
+
+
+If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?" - The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a soluition to this, the bot will send a second message including the ID in plain text to allow for easier copying.
 
 
 
