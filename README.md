@@ -3,6 +3,32 @@
 A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message server staff and receive a reply. This project is built for the Discord Community Hack Week for fun and is not intended to be a production ready product.
 
 
+## Usage
+
+Users can send messages in the designated "Message-Channel" though, the channel name can of course be saved. After the user sends a message, the message is immediately deleted and routed to the inbox channel. Upon successful receipt of the message, the user should receive a direct message confirming their message has been sent. The user will receive a mention ping if their privacy settings do not allow direct messages. 
+
+*Note: It's recommended to enable slowmode to prevent spam*
+
+![](https://media.giphy.com/media/VGJi4ObV5pdJRg8JdT/giphy.gif)
+
+
+The confirmation message also serves as a copy for the end user to retain for their records.
+
+![](https://i.imgur.com/v2X5bsQ.png)
+
+The "Message-Inbox" channel can also have its name changed without impacting functionality. All received messages are stored here with a red embed color and will alert staff if the user in question has privacy settings restricted.
+
+When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity
+
+![](https://media.giphy.com/media/Ti23i1ETaW2vWtCAmG/giphy.gif)
+
+Assuming the end user has corrected their privacy settings, a message will be sent as you'd expect.
+
+![](https://media.giphy.com/media/JUMFPr2fPzIFGqKCqn/giphy.gif)
+![](https://i.imgur.com/FwV3Jgs.png)
+
+
+
 
 
 ## Open source libraries used in this project
