@@ -11,6 +11,7 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 
 import java.awt.*;
+import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -267,7 +268,6 @@ public class MessageActions implements MessageCreateListener {
                     });
 
                     break;
-
 
                 // Used if the system has been reset and requires setup again
                 case "setup":

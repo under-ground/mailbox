@@ -6,6 +6,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.ServerTextChannelBuilder;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
@@ -14,6 +15,7 @@ import org.javacord.api.event.Event;
 import org.javacord.api.event.server.ServerEvent;
 import org.javacord.api.event.server.ServerJoinEvent;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -269,6 +271,17 @@ public class GuildUtil {
             // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
             PropertiesConfiguration config = new PropertiesConfiguration("./data/" + server.getId() + ".properties");
             File file = new File("./data/" + server.getId() + ".properties");
+            File image = new File("./images/mailboxicon.png");
+
+            EmbedBuilder embed = new EmbedBuilder()
+                    .setThumbnail(new File(image.getPath()))
+                    .setColor(Color.white)
+                    .setTitle("How to send a message")
+                    .setDescription("If you have an issue you want to contact the server staff about, simply send a message in this channel" +
+                            " and it will be auto deleted. Don't worry, the server staff will still see it! If we have successfully received" +
+                            " your message, you will receive a private confirmation message depending on your privacy settings. Make sure to have" +
+                            " **Direct Messages** enabled in order to get a response!");
+
             if (file.exists()) {
                 Permissions permissions = new PermissionsBuilder().setAllDenied().build();
 
@@ -304,34 +317,10 @@ public class GuildUtil {
 
                 }
                 if (!config.containsKey("messageChannel")) {
-                    CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
-                            .setName("message-channel")
-                            .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
-                            .setAuditLogReason("Automated creation from bot to set up message system")
-                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
-                            .create().thenAccept(channel -> {
-                                try {
-                                    GuildUtil.addMessageChannel(server.getId(), channel.getIdAsString(), api);
-                                    channel.sendMessage(" The " + channel.getMentionTag() + " has been set up successfully");
-                                } catch (Exception ex) {
-                                    channel.sendMessage("Message channel was unable to be created");
-                                }
-                            });
+                    addMessageChannel(server, api, embed, permissions);
                 } else if (!api.getServerById(server.getId()).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
 
-                    CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
-                            .setName("message-channel")
-                            .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
-                            .setAuditLogReason("Automated creation from bot to set up message system")
-                            .addPermissionOverwrite(server.getEveryoneRole(), permissions)
-                            .create().thenAccept(channel -> {
-                                try {
-                                    GuildUtil.addMessageChannel(server.getId(), channel.getIdAsString(), api);
-                                    channel.sendMessage(" The Message channel was previously created but was unable to be verified. A new replacement channel " + channel.getMentionTag() + " has been created as a result.");
-                                } catch (Exception ex) {
-                                    channel.sendMessage("Message channel was unable to be created");
-                                }
-                            });
+                    addMessageChannel(server, api, embed, permissions);
                 }
 
             }
@@ -340,5 +329,22 @@ public class GuildUtil {
             Main.logger.error(e.getMessage());
         }
     }
+
+    private static void addMessageChannel(Server server, DiscordApi api, EmbedBuilder embed, Permissions permissions) {
+        CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(server)
+                .setName("message-channel")
+                .setTopic("Send a message in this channel and it will automatically be deleted and sent to server staff.")
+                .setAuditLogReason("Automated creation from bot to set up message system")
+                .addPermissionOverwrite(server.getEveryoneRole(), permissions)
+                .create().thenAccept(channel -> {
+                    try {
+                        GuildUtil.addMessageChannel(server.getId(), channel.getIdAsString(), api);
+                        channel.sendMessage(embed);
+                    } catch (Exception ex) {
+                        channel.sendMessage("Message channel was unable to be created");
+                    }
+                });
+    }
+
 
 }
