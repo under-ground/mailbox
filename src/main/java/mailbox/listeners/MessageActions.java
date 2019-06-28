@@ -11,7 +11,6 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 
 import java.awt.*;
-import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -147,7 +146,7 @@ public class MessageActions implements MessageCreateListener {
                                     .setThumbnail(server.getIcon().get())
                                     .setTitle("**The " + server.getName() + " staff have sent you a message**").setColor(Color.green)
                                     .addField("Message", message, true)
-                                    .addField("Note", "To reply, revisit the <#" + GuildUtil.getMessageChannelId(server.getId(), event.getApi()) + "> channel or reach out to a moderator directly.", true);
+                                    .addField("Note", "To reply, revisit the <#" + GuildUtil.getMessageChannelId(server.getId(), event.getApi()) + "> channel or reach out to a staff member directly.", true);
                             if (event.getMessageContent().startsWith(GuildUtil.botPrefix(server.getId()) + "reply ")) {
                                 // Adds the newMessage composer if the command is /reply, and sets the thumbnail to their profile picture
                                 userMessage.setDescription("*Composed by " + event.getMessageAuthor().asUser().get().getNicknameMentionTag() + "*")
