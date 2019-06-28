@@ -178,23 +178,29 @@ public class GuildUtil {
 
         try {
 
-            File file = new File("./data/" + guildId + ".properties");
+                File file = new File("./data/" + guildId + ".properties");
 
-            PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
-            if (file.exists()) {
-                if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
-                    return config.getProperty("messageInbox").toString();
+                PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
+
+                if (file.exists()) {
+
+                    if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                        return config.getProperty("messageInbox").toString();
+                    }
+
                 }
-
-            }
 
         } catch (ConfigurationException ex) {
             Logger.getLogger(GuildUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return null;
+
+
     }
 
     public static User getTargetUserByArgs(String args, int index, DiscordApi api) throws InvalidUsageException {
+
         try {
             String[] splitArgs = args.split(" ");
             User targetUser = api.getUserById(Long.parseLong(splitArgs[index].replaceAll("[<@!>]", ""))).get();
@@ -203,6 +209,7 @@ public class GuildUtil {
         } catch (InterruptedException | ExecutionException | NumberFormatException ex) {
             throw new InvalidUsageException("❌ The target user could not be found.");
         }
+
     }
 
 
