@@ -64,14 +64,14 @@ public class JoinActions implements ServerJoinListener {
                             .addPermissionOverwrite(event.getServer().getEveryoneRole(), permissions)
                             .create().thenAccept(channel -> {
                                 try {
-                                    GuildUtil.addMessageInbox(event.getServer().getId(), channel.getIdAsString());
+                                    GuildUtil.addMessageInbox(event.getServer().getId(), channel.getIdAsString(), event.getApi());
                                     channel.sendMessage(" The " + channel.getMentionTag() + " has been set up successfully");
                                 } catch (Exception ex) {
                                     channel.sendMessage("The inbox was unable to be set up");
                                 }
                             });
 
-                } else if (!Main.api.getServerById(event.getServer().getId()).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                } else if (!event.getApi().getServerById(event.getServer().getId()).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
                     CompletableFuture<Void> inboxChannel = new ServerTextChannelBuilder(event.getServer())
                             .setName("message-inbox")
                             .setTopic("Use " + GuildUtil.botPrefix(event.getServer().getId()) + "reply <User ID> <Message> to respond to messages")
@@ -79,7 +79,7 @@ public class JoinActions implements ServerJoinListener {
                             .addPermissionOverwrite(event.getServer().getEveryoneRole(), permissions)
                             .create().thenAccept(channel -> {
                                 try {
-                                    GuildUtil.addMessageInbox(event.getServer().getId(), channel.getIdAsString());
+                                    GuildUtil.addMessageInbox(event.getServer().getId(), channel.getIdAsString(), event.getApi());
                                     channel.sendMessage(" The Message Inbox channel was previously created but was unable to be verified. A new replacement channel " + channel.getMentionTag() + " has been created as a result.");
                                 } catch (Exception ex) {
                                     channel.sendMessage("Automated creation from bot to set up message system");
@@ -95,13 +95,13 @@ public class JoinActions implements ServerJoinListener {
                             .addPermissionOverwrite(event.getServer().getEveryoneRole(), permissions)
                             .create().thenAccept(channel -> {
                                 try {
-                                    GuildUtil.addMessageChannel(event.getServer().getId(), channel.getIdAsString());
+                                    GuildUtil.addMessageChannel(event.getServer().getId(), channel.getIdAsString(), event.getApi());
                                     channel.sendMessage(" The " + channel.getMentionTag() + " has been set up successfully");
                                 } catch (Exception ex) {
                                     channel.sendMessage("Message channel was unable to be created");
                                 }
                             });
-                } else if (!Main.api.getServerById(event.getServer().getId()).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+                } else if (!event.getApi().getServerById(event.getServer().getId()).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
 
                     CompletableFuture<Void> messageChannel = new ServerTextChannelBuilder(event.getServer())
                             .setName("message-channel")
@@ -110,7 +110,7 @@ public class JoinActions implements ServerJoinListener {
                             .addPermissionOverwrite(event.getServer().getEveryoneRole(), permissions)
                             .create().thenAccept(channel -> {
                                 try {
-                                    GuildUtil.addMessageChannel(event.getServer().getId(), channel.getIdAsString());
+                                    GuildUtil.addMessageChannel(event.getServer().getId(), channel.getIdAsString(), event.getApi());
                                     channel.sendMessage(" The Message channel was previously created but was unable to be verified. A new replacement channel " + channel.getMentionTag() + " has been created as a result.");
                                 } catch (Exception ex) {
                                     channel.sendMessage("Message channel was unable to be created");

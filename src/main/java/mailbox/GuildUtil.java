@@ -3,6 +3,7 @@ package mailbox;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.user.User;
 
 import java.io.File;
@@ -98,14 +99,14 @@ public class GuildUtil {
      * @throws IOException
      * @throws Exception
      */
-    public static void addMessageChannel(long guildId, String messageChannel) throws ConfigurationException, IOException, Exception {
+    public static void addMessageChannel(long guildId, String messageChannel, DiscordApi api) throws ConfigurationException, IOException, Exception {
         // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
         PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
         File file = new File("./data/" + guildId + ".properties");
 
         // Checks to see if the file exists, if it does the method is stopped and an exception is thrown
         if (file.exists()) {
-            if (config.containsKey("messageChannel") && Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+            if (config.containsKey("messageChannel") && api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
                 throw new Exception("The Message System Module is already is already set up");
             } else {
                 config.setProperty("messageChannel", messageChannel);
@@ -123,14 +124,14 @@ public class GuildUtil {
      * @throws IOException
      * @throws Exception
      */
-    public static void addMessageInbox(long guildId, String messageInbox) throws ConfigurationException, IOException, Exception {
+    public static void addMessageInbox(long guildId, String messageInbox, DiscordApi api) throws ConfigurationException, IOException, Exception {
         // Specifies the specific Guild configuration file location and assigns name based on the events Guild ID
         PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
         File file = new File("./data/" + guildId + ".properties");
 
         // Checks to see if the file exists, if it does the method is stopped and an exception is thrown
         if (file.exists()) {
-            if (config.containsKey("messageInbox") && Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+            if (config.containsKey("messageInbox") && api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
                 throw new Exception("The Message System Module is already is already set up");
             } else {
                 config.setProperty("messageInbox", messageInbox);
@@ -146,7 +147,7 @@ public class GuildUtil {
      * @param guildId
      * @return
      */
-    public static String getMessageChannelId(long guildId) {
+    public static String getMessageChannelId(long guildId, DiscordApi api) {
 
         try {
 
@@ -154,7 +155,7 @@ public class GuildUtil {
 
             PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
             if (file.exists()) {
-                if (Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
+                if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageChannel").toString()).isPresent()) {
                     return config.getProperty("messageChannel").toString();
                 }
 
@@ -173,7 +174,7 @@ public class GuildUtil {
      * @param guildId
      * @return
      */
-    public static String getInboxChannelId(long guildId) {
+    public static String getInboxChannelId(long guildId, DiscordApi api) {
 
         try {
 
@@ -181,7 +182,7 @@ public class GuildUtil {
 
             PropertiesConfiguration config = new PropertiesConfiguration("./data/" + guildId + ".properties");
             if (file.exists()) {
-                if (Main.api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
+                if (api.getServerById(guildId).get().getChannelById(config.getProperty("messageInbox").toString()).isPresent()) {
                     return config.getProperty("messageInbox").toString();
                 }
 
@@ -193,15 +194,17 @@ public class GuildUtil {
         return null;
     }
 
-    public static User getTargetUserByArgs(String args, int index) throws InvalidUsageException {
+    public static User getTargetUserByArgs(String args, int index, DiscordApi api) throws InvalidUsageException {
         try {
             String[] splitArgs = args.split(" ");
-            User targetUser = Main.api.getUserById(Long.parseLong(splitArgs[index].replaceAll("[<@!>]", ""))).get();
+            User targetUser = api.getUserById(Long.parseLong(splitArgs[index].replaceAll("[<@!>]", ""))).get();
             return targetUser;
+
         } catch (InterruptedException | ExecutionException | NumberFormatException ex) {
             throw new InvalidUsageException("❌ The target user could not be found.");
         }
     }
+
 
     public static class InvalidUsageException extends Exception {
 

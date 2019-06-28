@@ -34,7 +34,7 @@ public class MessageActions implements MessageCreateListener {
     public void onMessageCreate(MessageCreateEvent event) {
 
 
-        if (event.getChannel().getIdAsString() == null ? GuildUtil.getInboxChannelId(event.getServer().get().getId()) == null : event.getChannel().getIdAsString().equals(GuildUtil.getMessageChannelId(event.getServer().get().getId()))) {
+        if (event.getChannel().getIdAsString() == null ? GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi()) == null : event.getChannel().getIdAsString().equals(GuildUtil.getMessageChannelId(event.getServer().get().getId(), event.getApi()))) {
 
             try {
 
@@ -62,7 +62,7 @@ public class MessageActions implements MessageCreateListener {
                     try {
                         event.getApi().getUserById(event.getMessageAuthor().getId()).get().openPrivateChannel().get().sendMessage(privateMessage).join();
                     } catch (InterruptedException | ExecutionException | NoSuchElementException | CompletionException ex) {
-                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage("❌ " + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
+                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi())).get().asTextChannel().get().sendMessage("❌ " + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
                                 + " sent us a message, but they are unable to receive direct messages.");
 
                         event.getChannel().sendMessage("❌ "
@@ -103,14 +103,14 @@ public class MessageActions implements MessageCreateListener {
                     userMessage.setFooter("ID: " + event.getMessageAuthor().getIdAsString());
 
                     // Sends the newMessage in the Receiving Channel
-                    event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
+                    event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
                         // Deletes the newMessage
                         event.getMessage().delete().join();
 
                         // Adds ❌ reaction to allow staff to see if a message has not been responded to yet
                         message.addReaction("❌");
                         // Sends the sending user's ID in the Receiving Channel for ease-of-access copy-paste
-                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
+                        event.getApi().getChannelById(GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
                     });
 
                 }
@@ -119,7 +119,7 @@ public class MessageActions implements MessageCreateListener {
             }
         }
 
-        if (event.getChannel().getIdAsString() == null ? GuildUtil.getInboxChannelId(event.getServer().get().getId()) == null : event.getChannel().getIdAsString().equals(GuildUtil.getInboxChannelId(event.getServer().get().getId()))) {
+        if (event.getChannel().getIdAsString() == null ? GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi()) == null : event.getChannel().getIdAsString().equals(GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi()))) {
             if (event.getMessageContent().startsWith(GuildUtil.botPrefix(event.getServer().get().getId()) + "anonreply ") || event.getMessageContent().startsWith(GuildUtil.botPrefix(event.getServer().get().getId()) + "reply ")) {
 
                 try {
@@ -130,7 +130,7 @@ public class MessageActions implements MessageCreateListener {
                         message = message.substring(1);
                     }
                     // Calls a custom function to grab a user via command arguments
-                    User targetUser = GuildUtil.getTargetUserByArgs(message, 0);
+                    User targetUser = GuildUtil.getTargetUserByArgs(message, 0, event.getApi());
                     // Removes the @ or ID from the new newMessage
                     message = message.substring(message.indexOf(" ") + 1);
 
@@ -138,7 +138,7 @@ public class MessageActions implements MessageCreateListener {
                             .setThumbnail(event.getServer().get().getIcon().get())
                             .setTitle("**The " + event.getServer().get().getName() + " staff have sent you a message**").setColor(Color.green)
                             .addField("Message", message, true)
-                            .addField("Note", "To reply, send a message here, revisit the <#" + GuildUtil.getMessageChannelId(event.getServer().get().getId()) + "> channel or reach out to a moderator directly.", true);
+                            .addField("Note", "To reply, send a message here, revisit the <#" + GuildUtil.getMessageChannelId(event.getServer().get().getId(), event.getApi()) + "> channel or reach out to a moderator directly.", true);
                     if (event.getMessageContent().startsWith(GuildUtil.botPrefix(event.getServer().get().getId()) + "reply ")) {
                         // Adds the newMessage composer if the command is /reply, and sets the thumbnail to their profile picture
                         userMessage.setDescription("*Composed by " + event.getMessageAuthor().asUser().get().getNicknameMentionTag() + "*")
