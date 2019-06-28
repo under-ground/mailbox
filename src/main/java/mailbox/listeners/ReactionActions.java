@@ -16,8 +16,8 @@ public class ReactionActions implements ReactionAddListener {
      */
     @Override
     public void onReactionAdd(ReactionAddEvent event) {
-        if (event.getChannel().getId() == Long.parseLong(GuildUtil.getInboxChannelId(event.getServer().get().getId()))) {
-            if (event.getEmoji().asUnicodeEmoji().orElseThrow(() -> new AssertionError("This should not be triggered by custom emoji")) == "❌" ) {
+        if (!event.getUser().isBot() && event.getChannel().getId() == Long.parseLong(GuildUtil.getInboxChannelId(event.getServer().get().getId()))) {
+            if (event.getEmoji().asUnicodeEmoji().orElseThrow(() -> new AssertionError("This should not be triggered by custom emoji")).equals("❌")) {
                 event.requestMessage().thenAccept(message -> {
                     message.removeAllReactions();
                     message.addReaction("✅");
