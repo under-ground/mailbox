@@ -7,8 +7,7 @@ You will be able to add the bot to your server and test out its features for the
 
 You can invite the bot to your server by clicking [here](https://discordapp.com/oauth2/authorize?client_id=591466840371363870&scope=bot&permissions=8)
 
-
-You can also join the [Mailbox Discord Server](https://discord.gg/9fDc5ze) if you just want to see what it looks like and test sending messages. *Note: The message-inbox channel is left readable to all users just for visibility purposes, but users are restricted from DMing for security reasons*
+*Note: If you invite the bot to your server, be sure to add the permissions you want in the message-channel so users can see and send messages in it*
 
 
 ## Usage
