@@ -51,6 +51,7 @@ public class MessageActions implements MessageCreateListener {
                             String newUserMessage = event.getMessageContent();
 
                             if (newUserMessage.length() > 1024) {
+                                event.getMessage().delete();
                                 BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your message was " + event.getMessageContent().length() + " characters in length - Please shorten your message", 10, true);
                                 return;
                             }
