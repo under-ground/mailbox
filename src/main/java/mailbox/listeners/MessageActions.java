@@ -1,6 +1,8 @@
 package mailbox.listeners;
 
+import mailbox.BotUtil;
 import mailbox.GuildUtil;
+import mailbox.Mailbox;
 import org.apache.commons.configuration.ConfigurationException;
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -47,6 +49,11 @@ public class MessageActions implements MessageCreateListener {
 
                             // Grabs the text of the newMessage
                             String newUserMessage = event.getMessageContent();
+
+                            if (newUserMessage.length() > 1024) {
+                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your was " + event.getMessageContent().length() + " characters long - Please shorten your message", 10, true);
+                                return;
+                            }
                             // Grabs the attachments of the newMessage
                             List<MessageAttachment> MessageAttachments = event.getMessage().getAttachments();
 
@@ -71,23 +78,9 @@ public class MessageActions implements MessageCreateListener {
                                     event.getApi().getChannelById(GuildUtil.getInboxChannelId(server.getId(), event.getApi())).get().asTextChannel().get().sendMessage("❌ " + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
                                             + " sent us a message, but they are unable to receive direct messages.");
 
-                                    event.getChannel().sendMessage("❌ "
-                                            + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
-                                            + " your message was received successfully, but your direct messages are not open, please update your privacy settings.").thenAccept(message -> {
-                                        ScheduledExecutorService scheduler
-                                                = Executors.newSingleThreadScheduledExecutor();
+                                    BotUtil.messageSelfDestruct(event, event.getMessageAuthor().asUser().get().getNicknameMentionTag()
+                                            + " your message was received successfully, but your direct messages are not open, please update your privacy settings.", 10, true);
 
-                                        // Deletes the message notification to the user after 10 seconds.
-                                        Runnable task = new Runnable() {
-                                            public void run() {
-                                                message.delete();
-                                            }
-                                        };
-
-                                        int delay = 10;
-                                        scheduler.schedule(task, delay, TimeUnit.SECONDS);
-                                        scheduler.shutdown();
-                                    });
 
                                 }
                             });
@@ -109,6 +102,7 @@ public class MessageActions implements MessageCreateListener {
                             // Puts the sending user's ID at the footer of the embed
                             userMessage.setFooter("ID: " + event.getMessageAuthor().getIdAsString());
 
+
                             // Sends the newMessage in the Receiving Channel
                             event.getApi().getChannelById(GuildUtil.getInboxChannelId(server.getId(), event.getApi())).get().asTextChannel().get().sendMessage(userMessage).thenAcceptAsync(message -> {
                                 // Deletes the newMessage
@@ -119,9 +113,10 @@ public class MessageActions implements MessageCreateListener {
                                 event.getApi().getChannelById(GuildUtil.getInboxChannelId(server.getId(), event.getApi())).get().asTextChannel().get().sendMessage(event.getMessageAuthor().getIdAsString());
                             });
 
+
                         }
                     } catch (CompletionException | NoSuchElementException ex) {
-
+                        Mailbox.logger.error(ex.getMessage());
                     }
                 });
             }
@@ -141,6 +136,11 @@ public class MessageActions implements MessageCreateListener {
                             User targetUser = GuildUtil.getTargetUserByArgs(message, 0, event.getApi());
                             // Removes the @ or ID from the new newMessage
                             message = message.substring(message.indexOf(" ") + 1);
+
+                            if (message.length() > 1024) {
+                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your was " + event.getMessageContent().length() + " characters long - Please shorten your message", 10, true);
+                                return;
+                            }
 
                             EmbedBuilder userMessage = new EmbedBuilder()
                                     .setThumbnail(server.getIcon().get())
@@ -172,11 +172,11 @@ public class MessageActions implements MessageCreateListener {
                             event.getChannel().sendMessage("Sent by <@!" + event.getMessageAuthor().getIdAsString() + "> • Sent to <@!" + targetUser.getIdAsString() + ">");
 
                         } catch (CompletionException | NoSuchElementException ex) {
-                            event.getChannel().sendMessage(" Your message is too large! Please shorten the message before sending and try again");
-                        } catch (GuildUtil.InvalidUsageException e) {
-                            event.getChannel().sendMessage(e.getMessage());
+                            Mailbox.logger.error(ex.getMessage());
+                        } catch (GuildUtil.InvalidUsageException ex) {
+                            Mailbox.logger.error(ex.getMessage());
                         } catch (NullPointerException ex) {
-
+                            Mailbox.logger.error(ex.getMessage());
                         }
 
                     }
@@ -185,6 +185,7 @@ public class MessageActions implements MessageCreateListener {
 
         } catch (NullPointerException ex) {
             // Ignores if message system isn't currently set up
+            Mailbox.logger.error(ex.getMessage());
         }
         // verifies that the message starts with the guild prefix
         if (event.getMessageContent().startsWith(GuildUtil.botPrefix(server.getId()))) {
@@ -220,21 +221,21 @@ public class MessageActions implements MessageCreateListener {
                 break;
 
                 case "prefix":
-                        event.getApi().getThreadPool().getExecutorService().submit(() -> {
-                            // Check if the author is an administrator
-                            if (!event.getMessageAuthor().isServerAdmin()) {
-                                event.getChannel().sendMessage("This command can only be used by a server administrator");
-                                return;
-                            }
-                            try {
-                                GuildUtil.setPrefix(server.getId(), commandArgs[1]);
-                                event.getChannel().sendMessage("The server prefix has been changed to `" + GuildUtil.botPrefix(server.getId()) + "`");
+                    event.getApi().getThreadPool().getExecutorService().submit(() -> {
+                        // Check if the author is an administrator
+                        if (!event.getMessageAuthor().isServerAdmin()) {
+                            event.getChannel().sendMessage("This command can only be used by a server administrator");
+                            return;
+                        }
+                        try {
+                            GuildUtil.setPrefix(server.getId(), commandArgs[1]);
+                            event.getChannel().sendMessage("The server prefix has been changed to `" + GuildUtil.botPrefix(server.getId()) + "`");
 
-                            } catch (ConfigurationException | FileAlreadyExistsException ex) {
-                                Logger.getLogger(MessageActions.class.getName()).log(Level.SEVERE, null, ex);
-                                event.getChannel().sendMessage("The configuration file for this server has not been set up or is corrupted");
-                            }
-                        });
+                        } catch (ConfigurationException | FileAlreadyExistsException ex) {
+                            Logger.getLogger(MessageActions.class.getName()).log(Level.SEVERE, null, ex);
+                            event.getChannel().sendMessage("The configuration file for this server has not been set up or is corrupted");
+                        }
+                    });
 
                     break;
 
