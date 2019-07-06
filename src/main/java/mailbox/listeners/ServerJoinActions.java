@@ -29,7 +29,7 @@ public class ServerJoinActions implements ServerJoinListener {
             });
     }
 
-     void messageSetup(ServerEvent event) {
+    private void messageSetup(ServerEvent event) {
         File directory = new File("./data/");
 
         // Verifies directory exists and creates it if not
