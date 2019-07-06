@@ -1,7 +1,7 @@
 package mailbox.listeners;
 
 
-import mailbox.Main;
+import mailbox.Mailbox;
 import mailbox.GuildUtil;
 import org.apache.commons.configuration.ConfigurationException;
 import org.javacord.api.event.server.ServerEvent;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import static mailbox.GuildUtil.addMessageChannels;
 
 
-public class JoinActions implements ServerJoinListener {
+public class ServerJoinActions implements ServerJoinListener {
 
     /**
      * Handles events on bot server join
@@ -23,9 +23,10 @@ public class JoinActions implements ServerJoinListener {
      */
     @Override
     public void onServerJoin(ServerJoinEvent event) {
-        event.getApi().getThreadPool().getExecutorService().submit(() -> {
-            messageSetup(event);
-        });
+            event.getApi().getThreadPool().getExecutorService().submit(() -> {
+                messageSetup(event);
+                Mailbox.logger.info("Joined server: " + event.getServer().getName() + " - Guild ID: " + event.getServer().getId());
+            });
     }
 
      void messageSetup(ServerEvent event) {
@@ -39,7 +40,7 @@ public class JoinActions implements ServerJoinListener {
         try {
             GuildUtil.configureGuild(event.getServer().getId());
         } catch (IOException | ConfigurationException e) {
-            Main.logger.error(e.getMessage());
+            Mailbox.logger.error(e.getMessage());
         }
 
          addMessageChannels(event.getServer(), event.getApi());
