@@ -2,6 +2,7 @@ package mailbox;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.util.logging.ExceptionLogger;
 import org.javacord.core.util.logging.LoggerUtil;
 
@@ -10,6 +11,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BotUtil {
 
@@ -37,6 +41,23 @@ public class BotUtil {
         }
 
         Thread.setDefaultUncaughtExceptionHandler(ExceptionLogger.getUncaughtExceptionHandler());
+    }
+
+
+    public static void messageSelfDestruct(MessageCreateEvent event, int delay, String messageToSend) {
+
+        event.getChannel().sendMessage("❌ "
+                + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
+                + " " + messageToSend).thenAccept(message -> {
+            ScheduledExecutorService scheduler
+                    = Executors.newSingleThreadScheduledExecutor();
+
+            // Deletes the message notification to the user after 10 seconds.
+            Runnable task = () -> message.delete();
+
+            scheduler.schedule(task, delay, TimeUnit.SECONDS);
+            scheduler.shutdown();
+        });
     }
 
 
