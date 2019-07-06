@@ -16,16 +16,15 @@ Users can send messages in the designated "Message-Channel" though, the channel 
 
 *Note: It's recommended to enable slowmode to prevent spam*
 
-![](https://media.giphy.com/media/VGJi4ObV5pdJRg8JdT/giphy.gif)
+
+- A confirmation message is sent and also serves as a copy for the end user to retain for their records.
+
+- If character count is too high when sending a message or replying to one, the bot will produce a self destructing message that pings the user and informs them their message is too large. 
 
 
-The confirmation message also serves as a copy for the end user to retain for their records.
+- The "Message-Inbox" channel can also have its name changed without impacting functionality. All received messages are stored here with a red embed color and will alert staff if the user in question has privacy settings restricted.
 
-![](https://i.imgur.com/v2X5bsQ.png)
-
-The "Message-Inbox" channel can also have its name changed without impacting functionality. All received messages are stored here with a red embed color and will alert staff if the user in question has privacy settings restricted.
-
-When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity
+- When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity
 
 ![](https://media.giphy.com/media/Ti23i1ETaW2vWtCAmG/giphy.gif)
 
