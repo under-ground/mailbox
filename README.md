@@ -1,6 +1,6 @@
 ![](https://i.imgur.com/5SiW7vH.png)
 # discord-mailbox
-A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message all server staff and receive a response in private messages. The bot can be self hosted for a single server, or hosted on many servers at once. This project is built for the [Discord Community Hack Week](https://blog.discordapp.com/discord-community-hack-week-build-and-create-alongside-us-6b2a7b7bba33) for fun and educational purposes and is not intended to be a production ready product.
+A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message all server staff and receive a response in private messages. The bot can be self hosted for a single server, or hosted on many servers at once. This project was built for the [Discord Community Hack Week](https://blog.discordapp.com/discord-community-hack-week-build-and-create-alongside-us-6b2a7b7bba33) for fun and educational purposes.
 
 
 You will be able to add the bot to your server and test out its features for the duration of the contest. Once the winners have been announced, the bot will be taken offline and it's recommended to self host. 
