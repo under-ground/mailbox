@@ -16,13 +16,27 @@ public class ReactionActions implements ReactionAddListener {
      */
     @Override
     public void onReactionAdd(ReactionAddEvent event) {
+        if (event.getServer().isPresent()) {
+            event.getApi().getThreadPool().getExecutorService().submit(() -> handleReactions(event));
+        }
+    }
+
+    private void handleReactions(ReactionAddEvent event) {
         if (!event.getUser().isBot() && event.getChannel().getId() == Long.parseLong(GuildUtil.getInboxChannelId(event.getServer().get().getId(), event.getApi()))) {
             if (event.getEmoji().asUnicodeEmoji().orElseThrow(() -> new AssertionError("This should not be triggered by custom emoji")).equals("❌")) {
                 event.requestMessage().thenAccept(message -> {
                     message.removeAllReactions();
                     message.addReaction("✅");
                 });
+            } else {
+                if (event.getEmoji().asUnicodeEmoji().orElseThrow(() -> new AssertionError("This should not be triggered by custom emoji")).equals("✅")) {
+                    event.requestMessage().thenAccept(message -> {
+                        message.removeAllReactions();
+                        message.addReaction("❌");
+                    });
+                }
             }
+
         }
     }
 }
