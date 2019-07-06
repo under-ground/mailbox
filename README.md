@@ -47,7 +47,7 @@ Upon joining the server, the bot will automatically create two channels, "*messa
 
 **Currently supported commands** 
 
-*Note: The setup command is not necessary on server join, when the bot is invited to the server it'll automatically generate the necessary configuration files. If there is a message reset or if the bot is invited while the bot is offline, then the command will need to be used.
+*Note: The setup command is not necessary on server join, when the bot is invited to the server it'll automatically generate the necessary configuration files. If there is a message reset or if the bot is invited while the bot is offline, then the command will need to be used.*
 
 ![](https://i.imgur.com/Rw585SA.png)
 
