@@ -26,12 +26,7 @@ Users can send messages in the designated "Message-Channel" though, the channel 
 
 - When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity
 
-![](https://media.giphy.com/media/Ti23i1ETaW2vWtCAmG/giphy.gif)
-
-Assuming the end user has corrected their privacy settings, a message will be sent as you'd expect.
-
-![](https://media.giphy.com/media/JUMFPr2fPzIFGqKCqn/giphy.gif)
-![](https://i.imgur.com/FwV3Jgs.png)
+- Assuming the end user has corrected their privacy settings, a message will be sent as you'd expect.
 
 
 ## Additional Details
