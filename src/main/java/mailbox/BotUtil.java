@@ -44,16 +44,21 @@ public class BotUtil {
     }
 
 
-    public static void messageSelfDestruct(MessageCreateEvent event, int delay, String messageToSend) {
+    public static void messageSelfDestruct(MessageCreateEvent event, String messageToSend, int delay, boolean error) {
 
-        event.getChannel().sendMessage("❌ "
+        String unicode;
+
+        if (error) unicode = "❌";
+        else unicode = "✅";
+
+        event.getChannel().sendMessage(unicode + " "
                 + event.getMessageAuthor().asUser().get().getNicknameMentionTag()
                 + " " + messageToSend).thenAccept(message -> {
             ScheduledExecutorService scheduler
                     = Executors.newSingleThreadScheduledExecutor();
 
             // Deletes the message notification to the user after 10 seconds.
-            Runnable task = () -> message.delete();
+            Runnable task = message::delete;
 
             scheduler.schedule(task, delay, TimeUnit.SECONDS);
             scheduler.shutdown();
