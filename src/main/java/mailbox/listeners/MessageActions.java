@@ -51,7 +51,7 @@ public class MessageActions implements MessageCreateListener {
                             String newUserMessage = event.getMessageContent();
 
                             if (newUserMessage.length() > 1024) {
-                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your was " + event.getMessageContent().length() + " characters long - Please shorten your message", 10, true);
+                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your message was " + event.getMessageContent().length() + " characters in length - Please shorten your message", 10, true);
                                 return;
                             }
                             // Grabs the attachments of the newMessage
@@ -138,7 +138,7 @@ public class MessageActions implements MessageCreateListener {
                             message = message.substring(message.indexOf(" ") + 1);
 
                             if (message.length() > 1024) {
-                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your was " + event.getMessageContent().length() + " characters long - Please shorten your message", 10, true);
+                                BotUtil.messageSelfDestruct(event, " Your message must be 1024 characters or less. Your message was " + event.getMessageContent().length() + " characters in length - Please shorten your message", 10, true);
                                 return;
                             }
 
