@@ -28,7 +28,7 @@ import static mailbox.GuildUtil.addMessageChannels;
 public class MessageActions implements MessageCreateListener {
 
     // Used for separation of commandArgs
-    private static final Pattern separator = Pattern.compile(" ");
+    private Pattern separator = Pattern.compile(" ");
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
@@ -146,7 +146,7 @@ public class MessageActions implements MessageCreateListener {
                                     .setThumbnail(server.getIcon().get())
                                     .setTitle("**The " + server.getName() + " staff have sent you a message**").setColor(Color.green)
                                     .addField("Message", message, true)
-                                    .addField("Note", "To reply, revisit the <#" + GuildUtil.getMessageChannelId(server.getId(), event.getApi()) + "> channel or reach out to a staff member directly.", true);
+                                    .addField("Note:", "To reply, revisit the <#" + GuildUtil.getMessageChannelId(server.getId(), event.getApi()) + "> channel or reach out to a staff member directly.", true);
                             if (event.getMessageContent().startsWith(GuildUtil.botPrefix(server.getId()) + "reply ")) {
                                 // Adds the newMessage composer if the command is /reply, and sets the thumbnail to their profile picture
                                 userMessage.setDescription("*Composed by " + event.getMessageAuthor().asUser().get().getNicknameMentionTag() + "*")
@@ -282,6 +282,7 @@ public class MessageActions implements MessageCreateListener {
                     });
 
                     break;
+
 
             }
 
