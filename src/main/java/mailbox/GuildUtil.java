@@ -324,7 +324,7 @@ public class GuildUtil {
             }
 
         } catch (ConfigurationException e) {
-            Main.logger.error(e.getMessage());
+            Mailbox.logger.error(e.getMessage());
         }
     }
 
@@ -344,6 +344,5 @@ public class GuildUtil {
                     }
                 });
     }
-
 
 }
