@@ -71,12 +71,8 @@ if (token == null) {
     System.exit(1);
 }
 
-// Use bot token in command arguments or environment variables to run bot.
-new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
-    api.addServerJoinListener(new JoinActions());
-    api.addMessageCreateListener(new MessageActions());
-    api.addReactionAddListener(new ReactionActions());
-}).exceptionally(ExceptionLogger.get());
+ // Use bot token in command arguments or environment variables to run bot.
+ new DiscordApiBuilder().setToken(token).login().thenAccept(Mailbox::addListeners);
 ```
 
 ## Credits
