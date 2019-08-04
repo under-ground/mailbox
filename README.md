@@ -1,11 +1,6 @@
 ![](https://i.imgur.com/5SiW7vH.png)
-# discord-mailbox
-A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message all server staff and receive a response in private messages. The bot can be self hosted for a single server, or hosted on many servers at once. This project was built for the [Discord Community Hack Week](https://blog.discordapp.com/discord-community-hack-week-build-and-create-alongside-us-6b2a7b7bba33) for fun and educational purposes.
-
-
-You will be able to add the bot to your server and test out its features for the duration of the contest. Once the winners have been announced, the bot will be taken offline and it's recommended to self host. 
-
-You can invite the bot to your server by clicking [here](https://discordapp.com/oauth2/authorize?client_id=591466840371363870&scope=bot&permissions=8)
+# mailbox
+A Discord bot written in Java using the Javacord library to provide a simple and easy to use mailbox structure for servers to allow users to message all server staff and receive a response in private messages similar to other 'mod mail' systems. The bot can be self hosted for a single server, or hosted on many servers at once. This project was initially built for the [Discord Community Hack Week](https://blog.discordapp.com/discord-community-hack-week-build-and-create-alongside-us-6b2a7b7bba33) for fun and educational purposes, however updates and bug fixes will be pushed here periodically
 
 *Note: If you invite the bot to your server, be sure to add the permissions you want in the message-channel so users can see and send messages in it*
 
@@ -16,23 +11,17 @@ Users can send messages in the designated "Message-Channel" though, the channel 
 
 *Note: It's recommended to enable slowmode to prevent spam*
 
-![](https://media.giphy.com/media/VGJi4ObV5pdJRg8JdT/giphy.gif)
+
+- A confirmation message is sent and also serves as a copy for the end user to retain for their records.
+
+- If character count is too high when sending a message or replying to one, the bot will produce a self destructing message that pings the user and informs them their message is too large. 
 
 
-The confirmation message also serves as a copy for the end user to retain for their records.
+- The "Message-Inbox" channel can also have its name changed without impacting functionality. All received messages are stored here with a red embed color and will alert staff if the user in question has privacy settings restricted.
 
-![](https://i.imgur.com/v2X5bsQ.png)
+- When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity.
 
-The "Message-Inbox" channel can also have its name changed without impacting functionality. All received messages are stored here with a red embed color and will alert staff if the user in question has privacy settings restricted.
-
-When replying to a message, the outgoing message is saved as a green embed color. The ability to reply to messages is restricted to the inbox channel which gives freedom for controlling permissions at the server level instead of changing it through the bot. If a staff member replies to a user and that user has restrictive privacy settings, there will be a notification given, though the intended message will be saved for posterity
-
-![](https://media.giphy.com/media/Ti23i1ETaW2vWtCAmG/giphy.gif)
-
-Assuming the end user has corrected their privacy settings, a message will be sent as you'd expect.
-
-![](https://media.giphy.com/media/JUMFPr2fPzIFGqKCqn/giphy.gif)
-![](https://i.imgur.com/FwV3Jgs.png)
+- Assuming the end user has corrected their privacy settings, a message will be sent as you'd expect.
 
 
 ## Additional Details
@@ -41,7 +30,9 @@ When a server staff member responds to a users inquiry, they can click the ❌ r
 
 ![](https://media.giphy.com/media/XHFnOAlkJ2vDLKUsLU/giphy.gif)
 
-If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?" - The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a solution to this, the bot will send a second message including the ID in plain text to allow for easier copying.
+**If you didn't notice in the pictures above, the users ID is sent as a second message under the embed. You might be asking "Why do this, it's repetitive?"**
+
+- The answer is that on mobile Discord clients it can be quite difficult to copy the user ID from the embed. As a solution to this, the bot will send a second message including the ID in plain text to allow for easier copying.
 
 
 Upon joining the server, the bot will automatically create two channels, "*message-channel*" & "*message-inbox*" - Once the channels have been created, the bot will automatically post an embed in the *message-channel* which you can leave there for users to follow it's instructions. The new channels will have permissions restricted for *@everyone* so you will need to configure both the *message-channel* and *message-inbox* channel to the permissions you want them to have (having mods able to view *message-inbox* and @everyone or certain activity roles to view the *message-channel.*
@@ -49,7 +40,11 @@ Upon joining the server, the bot will automatically create two channels, "*messa
 ![](https://i.imgur.com/UB06pRv.png)
 
 
+**Currently supported commands** 
 
+![](https://i.imgur.com/Rw585SA.png)
+
+*Note: The setup command is not necessary on server join, when the bot is invited to the server it'll automatically generate the necessary configuration files. If there is a message reset or if the bot is invited while the bot is offline, then the command will need to be used.*
 
 ## Open source libraries used in this project
 
