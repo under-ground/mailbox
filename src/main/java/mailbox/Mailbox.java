@@ -64,11 +64,7 @@ public class Mailbox {
 
 
         // Use bot token in command arguments or environment variables to run bot.
-        new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
-
-            addListeners(api);
-
-        }).exceptionally(ExceptionLogger.get());
+        new DiscordApiBuilder().setToken(token).login().thenAccept(Mailbox::addListeners);
 
 
     }
